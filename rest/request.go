@@ -17,6 +17,9 @@ type Request struct {
 
 	// Environment used by middlewares to communicate.
 	Env map[string]interface{}
+	
+	// Used to unmarshal the incoming JSON request
+	Payload map[string]interface{}
 }
 
 // PathParam provides a convenient access to the PathParams map.
