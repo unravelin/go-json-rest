@@ -41,6 +41,7 @@ func TestWrapMiddlewares(t *testing.T) {
 		nil,
 		nil,
 		map[string]interface{}{},
+		nil,
 	}
 
 	handlerFunc(nil, r)
