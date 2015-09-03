@@ -2,6 +2,7 @@ package rest
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -17,9 +18,10 @@ type Request struct {
 
 	// Environment used by middlewares to communicate.
 	Env map[string]interface{}
-	
-	// Used to unmarshal the incoming JSON request
-	Payload map[string]interface{}
+
+	// Cache decoded JSON objects
+	Payload      map[string]interface{}
+	PayloadArray []map[string]interface{}
 }
 
 // PathParam provides a convenient access to the PathParams map.
@@ -39,6 +41,34 @@ func (r *Request) DecodeJsonPayload(v interface{}) error {
 		return err
 	}
 	return nil
+}
+
+// DecodeObjectPayload reads a JSON object from the request.
+func (r *Request) DecodeObjectPayload() (map[string]interface{}, error) {
+	var payload map[string]interface{}
+	err := r.DecodeJsonPayload(&payload)
+	if err != nil {
+		return nil, err
+	}
+	if payload == nil {
+		return nil, fmt.Errorf("empty payload")
+	}
+	return payload, nil
+}
+
+// DecodeObjectArray reads a JSON array of objects from the request.
+func (r *Request) DecodeArrayPayload() ([]map[string]interface{}, error) {
+	var payload []map[string]interface{}
+	err := r.DecodeJsonPayload(&payload)
+	if err != nil {
+		return nil, err
+	}
+	for i, val := range payload {
+		if val == nil {
+			return nil, fmt.Errorf("nil object in payload array (%d)", i)
+		}
+	}
+	return payload, nil
 }
 
 // BaseUrl returns a new URL object with the Host and Scheme taken from the request.

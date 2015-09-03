@@ -59,7 +59,8 @@ func adapterFunc(handler HandlerFunc) http.HandlerFunc {
 			origRequest,
 			nil,
 			map[string]interface{}{},
-			map[string]interface{}{},
+			nil,
+			nil,
 		}
 
 		writer := &responseWriter{

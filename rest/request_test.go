@@ -15,6 +15,8 @@ func defaultRequest(method string, urlStr string, body io.Reader, t *testing.T) 
 		origReq,
 		nil,
 		map[string]interface{}{},
+		nil,
+		nil,
 	}
 }
 
